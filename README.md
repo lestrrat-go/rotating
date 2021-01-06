@@ -19,6 +19,8 @@ f, err := rotating.NewFile(
 	rotating.WithRotationCount(5),
 )
 
+// *rotating.File fulfills io.Writer, so you can use it anywehere
+// io.Writer is accepted
 fmt.Fprintf(f, ...)
 ```
 
@@ -84,6 +86,11 @@ of `%H%M%S.log`, the following rules apply:
 | 2021-01-01 00:59:00 | 000000.log |
 | 2021-01-01 01:00:00 | 010000.log |
 | 2021-01-01 23:01:00 | 230100.log |
+
+# BUFFERING
+
+The underlying `io.Writer` for `*rotating.File` is a raw `*os.File`.
+Therefore to maximize efficiency you should wrap the object in a `bufio.Writer`
 
 # OPTIONS
 

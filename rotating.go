@@ -4,7 +4,6 @@
 package rotating
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"io"
@@ -221,10 +220,7 @@ func (f *File) rotateFile(ctx context.Context, newFileName string) error {
 		if f.file != nil {
 			finalizeWriter(f.file)
 		}
-		f.file = &bufferedWriter{
-			Writer:     bufio.NewWriter(newF),
-			baseWriter: newF,
-		}
+		f.file = newF
 		f.filename = newFileName
 		f.mu.Unlock()
 
@@ -286,22 +282,6 @@ func (f *File) makeSymlink() error {
 		return errors.Wrap(err, `failed to rename new symlink`)
 	}
 	return nil
-}
-
-type bufferedWriter struct {
-	*bufio.Writer
-	baseWriter interface {
-		io.WriteCloser
-		Sync() error
-	}
-}
-
-func (w *bufferedWriter) Sync() error {
-	return w.baseWriter.Sync()
-}
-
-func (w *bufferedWriter) Close() error {
-	return w.baseWriter.Close()
 }
 
 // Write satisfies the io.Writer interface.
