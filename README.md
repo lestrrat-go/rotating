@@ -2,6 +2,8 @@
 
 A representation of a file that knows how to rotate itself based on size/interval
 
+Loosely based on Perl5's [File::RotateLogs](https://metacpan.org/pod/File::RotateLogs)
+
 # CAVEAT EMPTOR
 
 This software has not been tested in the wild yet (Jan 2020)
